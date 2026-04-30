@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAUSE
+  CANCEL
+}
+
+model User {
+  id             Int            @id @default(autoincrement())
+  fullName       String         @map("full_name")
+  email          String         @unique
+  password       String
+  role           Role           @default(USER)
+
+  subscriptions  Subscription[]
+  testimonials   Testimonial[]
+
+  @@map("user")
+}
+
+model MealPlan {
+  id            Int            @id @default(autoincrement())
+  name          String
+  price         Float
+  description   String
+  imageUrl      String?        @map("image_url")
+
+  subscriptions Subscription[]
+
+  @@map("meal_plan")
+}
+
+model Subscription {
+  id                Int                 @id @default(autoincrement())
+  userId            Int                 @map("user_id")
+  phoneNumber       String              @map("phone_number")
+  planId            Int                 @map("plan_id")
+
+  mealType          String              @map("meal_type")
+  deliveryDays      String              @map("delivery_days")
+  allergies         String?
+
+  status            SubscriptionStatus  @default(ACTIVE)
+
+  endDate           DateTime?           @map("end_date") @db.Date
+  pausePeriodStart  DateTime?           @map("pause_period_start") @db.Date
+  pausePeriodEnd    DateTime?           @map("pause_period_end") @db.Date
+
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mealPlan          MealPlan            @relation(fields: [planId], references: [id])
+
+  @@map("subscription")
+}
+
+model Testimonial {
+  id        Int     @id @default(autoincrement())
+  userId    Int     @map("user_id")
+  review    String
+  rating    Int
+
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("testimonial")
+}
