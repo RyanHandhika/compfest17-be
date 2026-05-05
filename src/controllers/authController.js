@@ -5,7 +5,7 @@ const registerUser = async (req, res, next) => {
     const { full_name, email, password } = req.body;
 
     if (!full_name || !email || password) {
-      alert("Please fill all field!");
+      console.log("Please fill all field!");
     }
 
     const newUser = await authService.registerUser(req.body);
@@ -25,4 +25,20 @@ const registerUser = async (req, res, next) => {
   }
 };
 
-export default { registerUser };
+const loginUser = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || password) {
+      console.log("Please fill all field!");
+    }
+
+    const result = await authService.loginUser(req.body);
+
+    return res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default { registerUser, loginUser };

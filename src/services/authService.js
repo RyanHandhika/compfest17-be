@@ -1,18 +1,18 @@
 import { prisma } from "../db/prisma.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import { generateToken } from "../utils/jwt.js";
 
 const registerUser = async ({ full_name, email, password }) => {
-  const existingUser = await tx.user.findUnique({ where: { email } });
+  const existingUser = await prisma.user.findUnique({ where: { email } });
 
   if (existingUser) {
-    throw new BadRequestError("Email already registered", "AUTH_EMAIL_TAKEN");
+    console.log("Email already registered", "AUTH_EMAIL_TAKEN");
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser = await tx.user.create({
+  const newUser = await prisma.user.create({
     data: {
-      fullName,
+      fullName: full_name,
       email,
       password: hashedPassword,
       role: "USER",
@@ -27,4 +27,32 @@ const registerUser = async ({ full_name, email, password }) => {
   };
 };
 
-export default { registerUser };
+const loginUser = async ({ email, password }) => {
+  const user = await prisma.user.findUnique({ where: { email } });
+
+  if (!user || !user.password) {
+    throw new Error("Invalid email or password");
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordValid) {
+    throw new Error("Invalid email or password");
+  }
+
+  const token = generateToken({
+    userId: user.id,
+    email: user.email,
+  });
+
+  return {
+    user: {
+      id: user.id,
+      full_Name: user.fullName,
+      email: user.email,
+    },
+    token,
+  };
+};
+
+export default { registerUser, loginUser };
