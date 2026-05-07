@@ -41,4 +41,12 @@ const loginUser = async (req, res, next) => {
   }
 };
 
-export default { registerUser, loginUser };
+const logoutUser = async (req, res, next) => {
+  try {
+    res.json({ message: "Logout successful" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default { registerUser, loginUser, logoutUser };
