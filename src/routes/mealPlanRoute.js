@@ -5,14 +5,18 @@ import mealPlanValidator from "../validators/mealPlanValidator.js";
 
 const mealPlanRouter = Router();
 
-mealPlanRouter.get("/", (req, res) => {
-  res.json({ message: "Get all meal plans" });
-});
+mealPlanRouter.get("/", mealPlanController.getAllMealPlans);
+
+mealPlanRouter.get("/:id", mealPlanController.getMealPlanById);
 
 mealPlanRouter.post(
   "/",
   validate(mealPlanValidator.mealPlanSchema),
   mealPlanController.createMealPlan,
 );
+
+mealPlanRouter.put("/:id", mealPlanController.updateMealPlan);
+
+mealPlanRouter.delete("/:id", mealPlanController.deleteMealPlan);
 
 export default mealPlanRouter;

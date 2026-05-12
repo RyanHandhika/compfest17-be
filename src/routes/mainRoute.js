@@ -1,6 +1,6 @@
 import { Router } from "express";
 import authRouter from "./authRoute.js";
-import mealPlanRouter from "./mealPlanRoute.js  ";
+import mealPlanRouter from "./mealPlanRoute.js";
 
 const router = Router();
 
