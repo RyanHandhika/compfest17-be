@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 const registerSchema = Joi.object({
-  fullName: Joi.string().alphanum().min(3).max(30).required().messages({
+  full_name: Joi.string().alphanum().min(3).max(30).required().messages({
     "string.empty": "Full name cannot be empty",
     "string.alphanum": "Full name must only contain letters and numbers",
     "string.min": "Full name must be at least 3 characters long",
@@ -13,19 +13,11 @@ const registerSchema = Joi.object({
     "string.email": "Please enter a valid email",
     "any.required": "Email is required",
   }),
-  password: Joi.string()
-    .min(8)
-    .pattern(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-    )
-    .required()
-    .messages({
-      "string.empty": "Password cannot be empty",
-      "string.min": "Password must be at least 8 characters",
-      "string.pattern.base":
-        "Password must contain uppercase, lowercase, number, and special character",
-      "any.required": "Password is required",
-    }),
+  password: Joi.string().min(8).required().messages({
+    "string.empty": "Password cannot be empty",
+    "string.min": "Password must be at least 8 characters",
+    "any.required": "Password is required",
+  }),
 });
 
 const loginSchema = Joi.object({
