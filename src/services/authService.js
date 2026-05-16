@@ -2,7 +2,7 @@ import { prisma } from "../db/prisma.js";
 import bcrypt from "bcrypt";
 import { generateToken } from "../utils/jwt.js";
 
-const registerUser = async ({ full_name, email, password }) => {
+const registerUser = async ({ full_name, email, password, role }) => {
   const existingUser = await prisma.user.findUnique({ where: { email } });
 
   if (existingUser) {
@@ -15,7 +15,7 @@ const registerUser = async ({ full_name, email, password }) => {
       fullName: full_name,
       email,
       password: hashedPassword,
-      role: "USER",
+      role,
     },
   });
 
@@ -23,7 +23,7 @@ const registerUser = async ({ full_name, email, password }) => {
     id: newUser.id,
     email: newUser.email,
     full_name: newUser.full_name,
-    role: "USER",
+    role: newUser.role,
   };
 };
 

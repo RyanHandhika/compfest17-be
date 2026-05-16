@@ -2,9 +2,9 @@ import authService from "../services/authService.js";
 
 const registerUser = async (req, res, next) => {
   try {
-    const { full_name, email, password } = req.body;
+    const { full_name, email, password, role } = req.body;
 
-    if (!full_name || !email || password) {
+    if (!full_name || !email || !password || !role) {
       console.log("Please fill all field!");
     }
 
@@ -17,6 +17,7 @@ const registerUser = async (req, res, next) => {
         user: {
           _id: newUser.id,
           email: newUser.email,
+          role: newUser.role,
         },
       },
     });

@@ -18,6 +18,11 @@ const registerSchema = Joi.object({
     "string.min": "Password must be at least 8 characters",
     "any.required": "Password is required",
   }),
+  role: Joi.string().valid("USER", "OPERATOR", "ADMIN").required().messages({
+    "string.empty": "Role cannot be empty",
+    "any.only": "Role must be one of USER, OPERATOR, or ADMIN",
+    "any.required": "Role is required",
+  }),
 });
 
 const loginSchema = Joi.object({
