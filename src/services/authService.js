@@ -50,6 +50,7 @@ const loginUser = async ({ email, password }) => {
       id: user.id,
       full_Name: user.fullName,
       email: user.email,
+      role: user.role.toLowerCase(),
     },
     token,
   };
